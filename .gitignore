@@ -1,0 +1,25 @@
+## Archivos de compilación y dependencias
+/target/
+*.class
+
+## IDEs y herramientas de desarrollo
+/.idea/
+/.vscode/
+*.iml
+
+## Archivos de Maven que no deberían versionarse
+mvnw*
+!mvnw.cmd
+!mvnw
+
+## Logs y archivos temporales
+*.log
+*.tmp
+
+## Archivos específicos del sistema operativo
+.DS_Store
+Thumbs.db
+
+## otros archivos innecesarios
+*.swp
+*~
