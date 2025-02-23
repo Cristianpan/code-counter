@@ -1,4 +1,4 @@
-package mantenimiento.codecounter.models.validators.formatValidators;
+package mantenimiento.codecounter.validators.formatValidators;
 
 import org.junit.jupiter.api.Test;
 import mantenimiento.codecounter.exceptions.InvalidFormatException;
