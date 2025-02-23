@@ -1,14 +1,14 @@
 package mantenimiento.codecounter.validators.formatValidators;
 
 import mantenimiento.codecounter.exceptions.InvalidFormatException;
-import mantenimiento.codecounter.interfaces.ValidatorHandler;
+import mantenimiento.codecounter.interfaces.FormatValidatorHandler;
 
-public abstract class FormatValidator implements ValidatorHandler<InvalidFormatException> {
+public abstract class FormatValidator implements FormatValidatorHandler {
 
-    private ValidatorHandler<InvalidFormatException> nextValidator;
+    private FormatValidatorHandler nextValidator;
 
     @Override
-    public void setNextValidator(ValidatorHandler<InvalidFormatException> nextFormatValidator) {
+    public void setNextValidator(FormatValidatorHandler nextFormatValidator) {
         this.nextValidator = nextFormatValidator;
     }
 
@@ -16,7 +16,7 @@ public abstract class FormatValidator implements ValidatorHandler<InvalidFormatE
         if (nextValidator != null) {
             return nextValidator.isValid(lineOfFile);
         }
-        
+
         return true;
     }
 }
