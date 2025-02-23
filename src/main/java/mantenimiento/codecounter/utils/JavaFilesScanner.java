@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import mantenimiento.codecounter.exceptions.FolderNotFoundException;
-import mantenimiento.codecounter.exceptions.NoJavaFilesFoundException;
+import mantenimiento.codecounter.exceptions.JavaFilesNotFoundException;
 
 public class JavaFilesScanner {
     /**
@@ -18,12 +18,8 @@ public class JavaFilesScanner {
      * @throws FolderNotFoundException Si la carpeta no existe o no es válida.
      * @throws NoJavaFilesFoundException Si no se encuentran archivos .java en la carpeta.
      */
-public static List<Path> getJavaFiles(String folderPath) throws FolderNotFoundException, NoJavaFilesFoundException {
+public static List<Path> getJavaFiles(String folderPath) throws FolderNotFoundException, JavaFilesNotFoundException {
     Path path = Paths.get(folderPath);
-    
-    if (!Files.exists(path) || !Files.isDirectory(path)) {
-        throw new FolderNotFoundException(folderPath);
-    }
 
     try (Stream<Path> stream = Files.walk(path)) {
         List<Path> javaFiles = stream.filter(Files::isRegularFile)
@@ -31,7 +27,7 @@ public static List<Path> getJavaFiles(String folderPath) throws FolderNotFoundEx
                 .toList();
 
         if (javaFiles.isEmpty()) {
-            throw new NoJavaFilesFoundException();
+            throw new JavaFilesNotFoundException();
         }
 
         return javaFiles;
