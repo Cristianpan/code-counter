@@ -50,13 +50,4 @@ public class FlowControlKeywordValidator extends LogicalValidator {
 
         return false;
     }
-
-    public static void main(String[] args) {
-        List<String> linesOfCode = Arrays.asList("break;", "continue;", "return;", "throw Exception;", "return valor;",
-                "throw new Exception(\"hola\");");
-
-        System.out.println(linesOfCode.get(5).matches(FLOW_CONTROL_KEYWORDS_REGEX));
-        System.out.println(linesOfCode.get(5).endsWith(";"));
-    }
-
 }
