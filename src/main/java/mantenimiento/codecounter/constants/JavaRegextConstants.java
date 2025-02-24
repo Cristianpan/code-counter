@@ -13,4 +13,5 @@ public class JavaRegextConstants {
     public final static String ELSE_DECLARATION_REGEX = "(}\\s+else\\s+(if)?\\s*)";
     public final static String BOOLEANS_OPERATORS = "((?:==|!=|<=|>=|<|>|\\|\\||&&|!)\\s*)";
     public final static String FINAL_OR_STATIC_REGEX = "(?:(?:static\\s+)?(?:final\\s+)?|(?:final\\s+)?(?:static\\s+)?)?";
+    public final static String ANNOTATION_REGEX = "^@[A-Za-z_]\\w*(\\(.*\\))?\\s*$";
 }
