@@ -16,21 +16,19 @@ import static mantenimiento.codecounter.constants.JavaRegextConstants.IDENTIFIER
  * ej: string value = "string 1" + "string 2" +
  * "sring 3";
  */
-public class DeclarationWhitInitializationValidator extends LogicalValidator {
+public class AssignmentValidator extends LogicalValidator {
 
-    private static final String DECLARATION_WITH_INITIALIZATION_REGEX = "^" + ACCESS_MODIFIERS_REGEX
-            + FINAL_OR_STATIC_REGEX
-            + DATATYPE_DECLARATION_REGEX + IDENTIFIER_DECLARATION_REGEX + "=\\s*[^;]+;?";
+    private static final String ASSIGMENT_REGEX = "^" + ACCESS_MODIFIERS_REGEX
+            + FINAL_OR_STATIC_REGEX + DATATYPE_DECLARATION_REGEX + "?" + IDENTIFIER_DECLARATION_REGEX + "=\\s*[^;]+;?";
 
     /**
-     * Valida si existe la declaracion con inicializacion
-     * y si esta termina con ; para conciderarlo como
-     * linea logica
+     * Valida si existe una asignacion y si esta termina con ; 
+     * para conciderarlo como linea logica, incluso si hay un salto de línea
      */
     @Override
     public boolean isValid(List<String> linesOfCode) {
 
-        if (isDeclarationWithInitialization(linesOfCode.get(0)) && endsWithSemiColon(linesOfCode)) {
+        if (isAssigment(linesOfCode.get(0)) && endsWithSemiColon(linesOfCode)) {
             return true;
         }
 
@@ -38,18 +36,16 @@ public class DeclarationWhitInitializationValidator extends LogicalValidator {
     }
 
     /**
-     * valida si existe el patron de una declaracion con inicializacion, con o sin
-     * terminacion ;
+     * valida si existe una asignacion, con o sin terminacion ;
      * ej: type id = value
      * ej: access final|static type id = value
+     * ej: id = value
      * 
      * @param lineOfCode sentencia por analizar
-     * @return true si coincide con el patron de declaracion con inicializacion,
-     *         false en caso contrario
+     * @return true si coincide con el patron de asignacion, false en caso contrario
      */
-    private boolean isDeclarationWithInitialization(String lineOfCode) {
-
-        return lineOfCode.matches(DECLARATION_WITH_INITIALIZATION_REGEX);
+    private boolean isAssigment(String lineOfCode) {
+        return lineOfCode.matches(ASSIGMENT_REGEX);
     }
 
     /**
