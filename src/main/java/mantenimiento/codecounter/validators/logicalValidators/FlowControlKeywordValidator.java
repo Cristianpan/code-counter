@@ -1,5 +1,6 @@
 package mantenimiento.codecounter.validators.logicalValidators;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * para control de flujo y que termine correctamente en ;
  */
 public class FlowControlKeywordValidator extends LogicalValidator {
-    public final static String FLOW_CONTROL_KEYWORDS_REGEX = "((break|continue)\\s*;|(return|trhow)).*";
+    public final static String FLOW_CONTROL_KEYWORDS_REGEX = "((break|continue)\\s*;|(return|throw)).*";
 
     /**
      * valida si existe una palabra clave de control de flujo
@@ -31,7 +32,7 @@ public class FlowControlKeywordValidator extends LogicalValidator {
      *         caso contrario
      */
     private boolean isFlowControlKeyword(String lineOfCode) {
-        return lineOfCode.matches(lineOfCode);
+        return lineOfCode.matches(FLOW_CONTROL_KEYWORDS_REGEX);
     }
 
     /**
@@ -46,7 +47,16 @@ public class FlowControlKeywordValidator extends LogicalValidator {
                 return true;
             }
         }
+
         return false;
+    }
+
+    public static void main(String[] args) {
+        List<String> linesOfCode = Arrays.asList("break;", "continue;", "return;", "throw Exception;", "return valor;",
+                "throw new Exception(\"hola\");");
+
+        System.out.println(linesOfCode.get(5).matches(FLOW_CONTROL_KEYWORDS_REGEX));
+        System.out.println(linesOfCode.get(5).endsWith(";"));
     }
 
 }
