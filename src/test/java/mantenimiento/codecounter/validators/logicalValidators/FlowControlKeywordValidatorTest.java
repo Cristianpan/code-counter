@@ -15,7 +15,7 @@ public class FlowControlKeywordValidatorTest {
     @Test
     @DisplayName("Debe de retornar true si detecta palabras de control de flujo con terminación correcta")
     void isCompleteFlowControlKeywordSentence() {
-        List<String> linesOfCode = Arrays.asList("break;", "continue;", "return;", "throw Exception;", "return valor;",
+        List<String> linesOfCode = Arrays.asList("break;", "continue;", "case 1: case 2:", "throw Exception;", "return valor;",
                 "throw new Exception(\"hola\");");
 
         System.out.println(linesOfCode.subList(5, linesOfCode.size()));
@@ -31,7 +31,7 @@ public class FlowControlKeywordValidatorTest {
     @Test
     @DisplayName("Debe de retornar false si detecta palabras de control de flujo con terminación incorrecta")
     void isIncompleteFlowControlKeywordSentence() {
-        List<String> linesOfCode = Arrays.asList("break", "continue", "return", "throw Exception", "return valor",
+        List<String> linesOfCode = Arrays.asList("break", "continue", "case 1", "throw Exception", "return valor",
                 "throw new Exception(\"hola\")");
 
         System.out.println(linesOfCode.subList(5, linesOfCode.size()));

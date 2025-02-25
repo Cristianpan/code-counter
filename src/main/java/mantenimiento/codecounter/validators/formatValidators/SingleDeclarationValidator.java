@@ -27,7 +27,7 @@ public class SingleDeclarationValidator extends FormatValidator {
             throw new InvalidFormatException("Múltiples declaraciones por línea: " + lineOfFile);
         }
 
-        return true;
+        return this.validateNext(lineOfFile); 
     }
 
     /**
