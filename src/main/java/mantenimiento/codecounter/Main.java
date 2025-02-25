@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        ProgramAnalizer.analiceProgram("C:\\Users\\cristianpan\\Desktop\\code-counter\\test");
+        ProgramAnalizer.analiceProgram(requestFolderPath());
     }
 
     private static String requestFolderPath() {
