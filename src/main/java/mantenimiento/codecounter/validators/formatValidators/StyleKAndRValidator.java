@@ -6,11 +6,11 @@ import static mantenimiento.codecounter.constants.JavaRegextConstants.CATCH_DECL
 import static mantenimiento.codecounter.constants.JavaRegextConstants.DATATYPE_DECLARATION_REGEX;
 import static mantenimiento.codecounter.constants.JavaRegextConstants.FINALLY_DECLARATION_REGEX;
 import static mantenimiento.codecounter.constants.JavaRegextConstants.FINAL_OR_STATIC_REGEX;
-import static mantenimiento.codecounter.constants.JavaRegextConstants.FLOW_CONTROL_REGEX;
 import static mantenimiento.codecounter.constants.JavaRegextConstants.IDENTIFIER_DECLARATION_REGEX;
 import static mantenimiento.codecounter.constants.JavaRegextConstants.PARAMETERS_DECLARATION_REGEX;
 import static mantenimiento.codecounter.constants.JavaRegextConstants.STRUCT_DECLARATION_REGEX;
 import static mantenimiento.codecounter.constants.JavaRegextConstants.TRY_DECLARATION_REGEX;
+import static mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_STYLE_K_AND_R;
 
 import mantenimiento.codecounter.exceptions.InvalidFormatException;
 
@@ -26,8 +26,7 @@ public class StyleKAndRValidator extends FormatValidator {
     private static final String METHOD_DECLARATION_REGEX = "^" + ACCESS_MODIFIERS_REGEX + FINAL_OR_STATIC_REGEX
             + DATATYPE_DECLARATION_REGEX + IDENTIFIER_DECLARATION_REGEX + PARAMETERS_DECLARATION_REGEX + ".*";
 
-    private static final String FLOW_CONTROL_DECLARATION_REGEX = "^((" + FLOW_CONTROL_REGEX
-            + PARAMETERS_DECLARATION_REGEX + "?)|do\\s*).*";
+    private static final String FLOW_CONTROL_DECLARATION_REGEX = "^\\s*(if|for|while|switch|do|}\\s*else(\\s+if)?)\\s*\\(.*\\)";
 
     private static final String TRY_CATCH_DECLARATION_REGEX = "^(" + TRY_DECLARATION_REGEX + "|"
             + CATCH_DECLARATION_REGEX + "|" + FINALLY_DECLARATION_REGEX + ")";
@@ -42,7 +41,7 @@ public class StyleKAndRValidator extends FormatValidator {
         }
 
         if (isOpeningBracket(lineOfFile) || isInvalidClosingBracket(lineOfFile)) {
-            throw new InvalidFormatException("No se ha seguido el formato de K&R");
+            throw new InvalidFormatException(INVALID_STYLE_K_AND_R, lineOfFile);
         }
 
         return validateNext(lineOfFile);
@@ -73,7 +72,7 @@ public class StyleKAndRValidator extends FormatValidator {
         if (endsWithOpeningBracket(lineOfFile)) {
             return true;
         }
-        throw new InvalidFormatException("No se ha seguido el formato de K&R");
+        throw new InvalidFormatException(INVALID_STYLE_K_AND_R, lineOfFile);
     }
 
     /**
@@ -85,7 +84,8 @@ public class StyleKAndRValidator extends FormatValidator {
      *         {@code false} en caso contrario.
      */
     private boolean isInvalidClosingBracket(String lineOfFile) {
-        return isClosingBracket(lineOfFile) && lineOfFile.trim().length() > 1 && !lineOfFile.contains("while");
+        return isClosingBracket(lineOfFile) && lineOfFile.trim().length() > 1
+                && (!lineOfFile.contains("while") && !lineOfFile.contains(";"));
     }
 
     /**
@@ -96,7 +96,7 @@ public class StyleKAndRValidator extends FormatValidator {
      *         contrario.
      */
     private boolean isOpeningBracket(String lineOfCode) {
-        return lineOfCode.startsWith("{");
+        return lineOfCode.trim().startsWith("{");
     }
 
     /**
@@ -108,7 +108,7 @@ public class StyleKAndRValidator extends FormatValidator {
      *         contrario.
      */
     private boolean isClosingBracket(String lineOfCode) {
-        return lineOfCode.matches(".*}.*");
+        return lineOfCode.trim().matches(".*}.*");
     }
 
     /**
@@ -120,7 +120,7 @@ public class StyleKAndRValidator extends FormatValidator {
      *         contrario.
      */
     private boolean endsWithOpeningBracket(String lineOfCode) {
-        return lineOfCode.matches("^[^{]*\\{.*");
+        return lineOfCode.trim().matches("^[^{]*\\{.*");
     }
 
     /**
@@ -131,7 +131,7 @@ public class StyleKAndRValidator extends FormatValidator {
      *         tipo, {@code false} en caso contrario.
      */
     private boolean isTypeDeclaration(String lineOfCode) {
-        return lineOfCode.matches(TYPE_DECLARION_REGEX);
+        return lineOfCode.trim().matches(TYPE_DECLARION_REGEX);
     }
 
     /**
@@ -142,7 +142,7 @@ public class StyleKAndRValidator extends FormatValidator {
      *         método, {@code false} en caso contrario.
      */
     private boolean isMethodDeclaration(String lineOfCode) {
-        return lineOfCode.matches(METHOD_DECLARATION_REGEX);
+        return lineOfCode.trim().matches(METHOD_DECLARATION_REGEX);
     }
 
     /**
@@ -153,7 +153,7 @@ public class StyleKAndRValidator extends FormatValidator {
      *         control de flujo, {@code false} en caso contrario.
      */
     private boolean isFlowControlDeclaration(String lineOfCode) {
-        return lineOfCode.matches(FLOW_CONTROL_DECLARATION_REGEX);
+        return lineOfCode.trim().matches(FLOW_CONTROL_DECLARATION_REGEX);
     }
 
     /**
@@ -164,7 +164,7 @@ public class StyleKAndRValidator extends FormatValidator {
      *         try-catch, {@code false} en caso contrario.
      */
     private boolean isTryCatchDeclaration(String lineOfCode) {
-        return lineOfCode.matches(TRY_CATCH_DECLARATION_REGEX);
+        return lineOfCode.trim().matches(TRY_CATCH_DECLARATION_REGEX);
     }
 
     /**
@@ -177,6 +177,6 @@ public class StyleKAndRValidator extends FormatValidator {
      * @return {@code true} si coincide con el final de la declaracion
      */
     private boolean isFinalDeclaration(String lineOfCode) {
-        return lineOfCode.matches(FINAL_DECLARATION_REGEX);
+        return lineOfCode.trim().matches(FINAL_DECLARATION_REGEX);
     }
 }

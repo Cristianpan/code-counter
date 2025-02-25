@@ -1,6 +1,7 @@
 package mantenimiento.codecounter.validators.formatValidators;
 
 import mantenimiento.codecounter.exceptions.InvalidFormatException;
+import static mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_IMPORT_STATEMENT;
 
 /**
  * Clase que valida si la importacion
@@ -11,10 +12,6 @@ import mantenimiento.codecounter.exceptions.InvalidFormatException;
  * 
  */
 public class ImportValidator extends FormatValidator {
-
-    public ImportValidator() {
-        super();
-    }
 
     /**
      * Realiza la validacion del formato verificando si 
@@ -28,7 +25,7 @@ public class ImportValidator extends FormatValidator {
     public boolean isValid(String lineOfFile) throws InvalidFormatException {
         if (isImportDeclaration(lineOfFile)) {
             if (isImportWithWildcard(lineOfFile)) {
-                throw new InvalidFormatException("Import con comodín");
+                throw new InvalidFormatException(INVALID_IMPORT_STATEMENT, lineOfFile);
             }
 
             return true;

@@ -18,11 +18,11 @@ import static mantenimiento.codecounter.constants.JavaRegextConstants.IDENTIFIER
  */
 public class AssignmentValidator extends LogicalValidator {
 
-    private static final String ASSIGMENT_REGEX = "^" + ACCESS_MODIFIERS_REGEX
-            + FINAL_OR_STATIC_REGEX + DATATYPE_DECLARATION_REGEX + "?" + IDENTIFIER_DECLARATION_REGEX + "=\\s*[^;]+;?";
+    private static final String ASSIGMENT_REGEX = "^\\s*" + ACCESS_MODIFIERS_REGEX
+            + FINAL_OR_STATIC_REGEX + DATATYPE_DECLARATION_REGEX + "?" + IDENTIFIER_DECLARATION_REGEX + "=\\s*.*;?";
 
     /**
-     * Valida si existe una asignacion y si esta termina con ; 
+     * Valida si existe una asignacion y si esta termina con ;
      * para conciderarlo como linea logica, incluso si hay un salto de línea
      */
     @Override
@@ -45,6 +45,9 @@ public class AssignmentValidator extends LogicalValidator {
      * @return true si coincide con el patron de asignacion, false en caso contrario
      */
     private boolean isAssigment(String lineOfCode) {
+        if (lineOfCode.equals("formatValidator = importValidator;")){
+            System.out.println(lineOfCode.matches(ASSIGMENT_REGEX));
+        }
         return lineOfCode.matches(ASSIGMENT_REGEX);
     }
 
@@ -55,10 +58,13 @@ public class AssignmentValidator extends LogicalValidator {
      * @return true si se encuentra el ;, false en caso contrario
      */
     private boolean endsWithSemiColon(List<String> linesOfCode) {
+        int lastIndex = 1;
         for (String lineOfCode : linesOfCode) {
             if (lineOfCode.endsWith(";")) {
+                removeLines(linesOfCode, lastIndex);
                 return true;
             }
+            lastIndex++;
         }
 
         return false;

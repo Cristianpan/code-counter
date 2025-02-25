@@ -42,7 +42,7 @@ public class ControlStructureValidator extends LogicalValidator {
      *         {@code false} en caso contrario.
      */
     private boolean isLogicalControlStructureDeclaration(String lineOfCode) {
-        return lineOfCode.matches(CONTROL_STRUCTURE_REGEX) && !lineOfCode.contains("switch");
+        return lineOfCode.trim().matches(CONTROL_STRUCTURE_REGEX) && !lineOfCode.trim().contains("switch");
     }
 
     /**
@@ -55,10 +55,13 @@ public class ControlStructureValidator extends LogicalValidator {
      *         {@code false} en caso contrario.
      */
     private boolean isValidStructure(List<String> linesOfCode) {
+        int i = 1;
         for (String lineOfCode : linesOfCode) {
-            if (lineOfCode.matches("[^)]*\\s*\\).*")) {
+            if (lineOfCode.trim().matches("[^)]*\\s*\\).*")) {
+                removeLines(linesOfCode, i);
                 return true;
             }
+            i++;
         }
         return false;
     }

@@ -7,12 +7,7 @@ import java.util.List;
  * para control de flujo y que termine correctamente en ;
  */
 public class FlowControlKeywordValidator extends LogicalValidator {
-    public final static String FLOW_CONTROL_KEYWORDS_REGEX = "((break|continue)\\s*;|(return|throw)|case\\s+.+:).*";
-
-    public static void main(String[] args) {
-        String caseSentence = "case 1:";
-        System.out.println(caseSentence.matches(FLOW_CONTROL_KEYWORDS_REGEX));
-    }
+    public final static String FLOW_CONTROL_KEYWORDS_REGEX = "^((\\s*break|continue)\\s*;|(return|throw)|case\\s+.+:).*";
 
     /**
      * valida si existe una palabra clave de control de flujo
@@ -36,7 +31,7 @@ public class FlowControlKeywordValidator extends LogicalValidator {
      *         caso contrario
      */
     private boolean isFlowControlKeyword(String lineOfCode) {
-        return lineOfCode.matches(FLOW_CONTROL_KEYWORDS_REGEX);
+        return lineOfCode.trim().matches(FLOW_CONTROL_KEYWORDS_REGEX);
     }
 
     /**
@@ -46,10 +41,13 @@ public class FlowControlKeywordValidator extends LogicalValidator {
      * @return true si se encuentra el ;, false en caso contrario
      */
     private boolean endsWithSemiColon(List<String> linesOfCode) {
+        int i = 1;
         for (String lineOfCode : linesOfCode) {
-            if (lineOfCode.endsWith(";") || lineOfCode.endsWith(":")) {
+            if (lineOfCode.trim().endsWith(";") || lineOfCode.trim().endsWith(":")) {
+                removeLines(linesOfCode, i);
                 return true;
             }
+            i++;
         }
 
         return false;
