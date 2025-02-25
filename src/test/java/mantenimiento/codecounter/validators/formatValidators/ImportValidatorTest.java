@@ -2,7 +2,6 @@ package mantenimiento.codecounter.validators.formatValidators;
 
 import org.junit.jupiter.api.Test;
 import mantenimiento.codecounter.exceptions.InvalidFormatException;
-import mantenimiento.codecounter.validators.formatValidators.ImportValidator;
 import org.junit.jupiter.api.DisplayName;
 
 import static org.junit.jupiter.api.Assertions.*;

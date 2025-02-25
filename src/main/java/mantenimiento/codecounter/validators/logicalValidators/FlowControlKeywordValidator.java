@@ -1,6 +1,5 @@
 package mantenimiento.codecounter.validators.logicalValidators;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
