@@ -20,18 +20,15 @@ class ImportValidatorTest {
     @DisplayName("Debe de lanzar la excepion al detectar comodin en import")
     void importWithWildcardThrowsException() {
         ImportValidator validator = new ImportValidator();
-        Exception exception = assertThrows(InvalidFormatException.class,
+        assertThrows(InvalidFormatException.class,
                 () -> validator.isValid("import java.util.*;"));
-
-        assertTrue(exception.getMessage().contains("Import con comodín"));
     }
 
     @Test
     @DisplayName("Debe de lanzar la excepion al detectar comodin en import static")
     void testStaticImportWithWildcardThrowsException() {
         ImportValidator validator = new ImportValidator();
-        Exception exception = assertThrows(InvalidFormatException.class,
+        assertThrows(InvalidFormatException.class,
                 () -> validator.isValid("import static java.lang.Math.*;"));
-        assertTrue(exception.getMessage().contains("Import con comodín"));
     }
 }

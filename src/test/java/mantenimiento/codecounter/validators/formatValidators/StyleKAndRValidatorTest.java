@@ -110,6 +110,7 @@ public class StyleKAndRValidatorTest {
     @Test
     @DisplayName("Debe de lanzar la excepcion InvalidFormException si hay una declaracion try-catch y no termina con {")
     void testInvalidTryCatchDeclaration() throws InvalidFormatException {
+        String tryDeclaration = "try";
         String tryWithResourcesDeclaration = "try (with resources) ";
         String catchDeclaration = "} catch (Exception e) ";
         String finallyDeclaration = "} finally ";

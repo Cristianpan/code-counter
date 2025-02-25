@@ -26,13 +26,17 @@ public class StyleKAndRValidator extends FormatValidator {
     private static final String METHOD_DECLARATION_REGEX = "^" + ACCESS_MODIFIERS_REGEX + FINAL_OR_STATIC_REGEX
             + DATATYPE_DECLARATION_REGEX + IDENTIFIER_DECLARATION_REGEX + PARAMETERS_DECLARATION_REGEX + ".*";
 
-    private static final String FLOW_CONTROL_DECLARATION_REGEX = "^\\s*(if|for|while|switch|do|}\\s*else(\\s+if)?)\\s*\\(.*\\)";
+    private static final String FLOW_CONTROL_DECLARATION_REGEX = "^\\s*(if|for|while|switch|do|}\\s*else(\\s+if)?)\\s*(\\(.*\\))?\\s*\\{?";
 
     private static final String TRY_CATCH_DECLARATION_REGEX = "^(" + TRY_DECLARATION_REGEX + "|"
             + CATCH_DECLARATION_REGEX + "|" + FINALLY_DECLARATION_REGEX + ")";
 
     private static final String FINAL_DECLARATION_REGEX = "^((" + DATATYPE_DECLARATION_REGEX
             + IDENTIFIER_DECLARATION_REGEX + ",?\\s*)+|(" + BOOLEANS_OPERATORS + ".*)+.*)\\).*";
+
+    public static void main(String[] args) {
+        System.out.println("} else {".matches(FLOW_CONTROL_DECLARATION_REGEX));
+    }
 
     @Override
     public boolean isValid(String lineOfFile) throws InvalidFormatException {
