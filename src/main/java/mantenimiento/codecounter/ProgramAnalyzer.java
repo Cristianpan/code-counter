@@ -18,8 +18,8 @@ import mantenimiento.codecounter.models.reporters.TerminalReporter;
 import mantenimiento.codecounter.utils.JavaFilesScanner;
 import mantenimiento.codecounter.validators.ValidatorManager;
 
-public class ProgramAnalizer {
-    public static void analiceProgram(String folderPath) {
+public class ProgramAnalyzer {
+    public static void analyzeProgram(String folderPath) {
         try {
             List<Path> javaFilePaths = JavaFilesScanner.getJavaFiles(folderPath);
             LineCounter lineCounter = processFiles(javaFilePaths);
@@ -34,6 +34,7 @@ public class ProgramAnalizer {
         } catch (Exception e) {
         }
     }
+
 
     private static LineCounter processFiles(List<Path> javaFilePaths)
             throws FileNotFoundException, InvalidFormatException {
