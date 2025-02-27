@@ -18,11 +18,12 @@ import static mantenimiento.codecounter.constants.JavaRegextConstants.IDENTIFIER
  */
 public class AssignmentValidator extends LogicalValidator {
 
-    private static final String ASSIGMENT_REGEX = "^" + ACCESS_MODIFIERS_REGEX
-            + FINAL_OR_STATIC_REGEX + DATATYPE_DECLARATION_REGEX + "?" + IDENTIFIER_DECLARATION_REGEX + "=\\s*[^;]+;?";
+    private static final String ASSIGMENT_REGEX = "^\\s*" + ACCESS_MODIFIERS_REGEX
+            + FINAL_OR_STATIC_REGEX + DATATYPE_DECLARATION_REGEX + "?(" + IDENTIFIER_DECLARATION_REGEX
+            + "|[^;]+\\s*)=.*;?\\s*";
 
     /**
-     * Valida si existe una asignacion y si esta termina con ; 
+     * Valida si existe una asignacion y si esta termina con ;
      * para conciderarlo como linea logica, incluso si hay un salto de línea
      */
     @Override
@@ -42,7 +43,8 @@ public class AssignmentValidator extends LogicalValidator {
      * ej: id = value
      * 
      * @param lineOfCode sentencia por analizar
-     * @return true si coincide con el patron de asignacion, false en caso contrario
+     * @return {@code true} si coincide con el patron de asignacion, {@code false}
+     *         en caso contrario
      */
     private boolean isAssigment(String lineOfCode) {
         return lineOfCode.matches(ASSIGMENT_REGEX);
@@ -52,13 +54,17 @@ public class AssignmentValidator extends LogicalValidator {
      * valida que la linea termina con ; o si existe el ; después de la linea
      * 
      * @param linesOfCode lineas de codigo por analizar
-     * @return true si se encuentra el ;, false en caso contrario
+     * @return {@code true} si se encuentra el ;, {@code false} en caso contrario
      */
     private boolean endsWithSemiColon(List<String> linesOfCode) {
+        String endsWith = linesOfCode.get(0).matches(".*\\{.*") ? ".*};\\s*" : ".*;\\s*";
+        int lastIndex = 1;
         for (String lineOfCode : linesOfCode) {
-            if (lineOfCode.endsWith(";")) {
+            if (lineOfCode.matches(endsWith)) {
+                removeLines(linesOfCode, lastIndex);
                 return true;
             }
+            lastIndex++;
         }
 
         return false;

@@ -1,6 +1,5 @@
 package mantenimiento.codecounter.validators.logicalValidators;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -8,7 +7,7 @@ import java.util.List;
  * para control de flujo y que termine correctamente en ;
  */
 public class FlowControlKeywordValidator extends LogicalValidator {
-    public final static String FLOW_CONTROL_KEYWORDS_REGEX = "((break|continue)\\s*;|(return|throw)).*";
+    public final static String FLOW_CONTROL_KEYWORDS_REGEX = "^((\\s*break|continue)\\s*;|(return|throw)|case\\s+.+:).*";
 
     /**
      * valida si existe una palabra clave de control de flujo
@@ -28,24 +27,27 @@ public class FlowControlKeywordValidator extends LogicalValidator {
      * palabra clave de control de flujo: break, continue, throw
      * 
      * @param lineOfCode sentencia por analizar
-     * @return true si corresponde a una palabra clave de control de flujo, false en
+     * @return {@code true} si corresponde a una palabra clave de control de flujo, {@code false} en
      *         caso contrario
      */
     private boolean isFlowControlKeyword(String lineOfCode) {
-        return lineOfCode.matches(FLOW_CONTROL_KEYWORDS_REGEX);
+        return lineOfCode.trim().matches(FLOW_CONTROL_KEYWORDS_REGEX);
     }
 
     /**
      * valida que la linea termina con ; o si existe el ; después de la linea
      * 
      * @param linesOfCode lineas de codigo por analizar
-     * @return true si se encuentra el ;, false en caso contrario
+     * @return {@code true} si se encuentra el ;, {@code false} en caso contrario
      */
     private boolean endsWithSemiColon(List<String> linesOfCode) {
+        int i = 1;
         for (String lineOfCode : linesOfCode) {
-            if (lineOfCode.endsWith(";")) {
+            if (lineOfCode.trim().endsWith(";") || lineOfCode.trim().endsWith(":")) {
+                removeLines(linesOfCode, i);
                 return true;
             }
+            i++;
         }
 
         return false;

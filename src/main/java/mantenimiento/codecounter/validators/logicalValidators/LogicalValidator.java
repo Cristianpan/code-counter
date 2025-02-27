@@ -12,10 +12,19 @@ public abstract class LogicalValidator implements LogicalValidatorHandler {
         this.nextValidator = nextLogicalValidator;
     }
 
-    protected boolean validateNext(List<String> lineOfFile) {
-        if (nextValidator != null) {
-            return nextValidator.isValid(lineOfFile);
+    protected void removeLines(List<String> linesOfFile, int lastIndex) {
+        while (lastIndex > 0 && !linesOfFile.isEmpty()) {
+            lastIndex--;
+            linesOfFile.remove(0);
         }
+    }
+
+    protected boolean validateNext(List<String> linesOfFile) {
+        if (nextValidator != null) {
+            return nextValidator.isValid(linesOfFile);
+        }
+
+        removeLines(linesOfFile, 1);
 
         return false;
     }

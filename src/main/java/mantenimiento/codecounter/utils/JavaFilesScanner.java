@@ -20,7 +20,6 @@ public class JavaFilesScanner {
      */
 public static List<Path> getJavaFiles(String folderPath) throws FolderNotFoundException, JavaFilesNotFoundException {
     Path path = Paths.get(folderPath);
-
     try (Stream<Path> stream = Files.walk(path)) {
         List<Path> javaFiles = stream.filter(Files::isRegularFile)
                 .filter(isJavaFile())
@@ -29,7 +28,7 @@ public static List<Path> getJavaFiles(String folderPath) throws FolderNotFoundEx
         if (javaFiles.isEmpty()) {
             throw new JavaFilesNotFoundException();
         }
-
+        
         return javaFiles;
 
     } catch (IOException e) {
@@ -41,7 +40,7 @@ public static List<Path> getJavaFiles(String folderPath) throws FolderNotFoundEx
      * Método para verificar si un archivo es un archivo .java.
      * @return Predicate que verifica si el archivo termina en ".java".
      */
-    public static Predicate<Path> isJavaFile(){
+    public static Predicate<Path> isJavaFile() {
         return fileName -> fileName.toString().endsWith(".java");
     }
 }
