@@ -1,5 +1,9 @@
 package mantenimiento.codecounter.constants;
 
+/**
+ * Clase que contiene constantes con expresiones regulares utilizadas para
+ * analizar estructuras y sintaxis del lenguaje Java.
+ */
 public class JavaRegextConstants {
     public final static String ACCESS_MODIFIERS_REGEX = "((public|private|protected)\\s+)?";
     public final static String DATATYPE_DECLARATION_REGEX = "(\\s*[a-zA-Z0-9]+(<[a-zA-Z0-9]+>)?\\s+)";
@@ -17,5 +21,5 @@ public class JavaRegextConstants {
     public final static String CATCH_DECLARATION_REGEX = "(}\\s*catch\\s+" + PARAMETERS_DECLARATION_REGEX + ".*)";
     public final static String FINALLY_DECLARATION_REGEX = "(}\\s*finally\\s.*)";
     public final static String INCREMENT_OR_DECREMENT_OPERATOR_REGEX = "(\\+\\+|--)";
-    public final static String OPERATORS_REGEX = "((\\+|-|\\*|/|%|&|\\||\\^|<<|>>)\\s*)"; 
+    public final static String OPERATORS_REGEX = "((\\+|-|\\*|/|%|&|\\||\\^|<<|>>)\\s*)";
 }

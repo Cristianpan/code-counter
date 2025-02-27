@@ -13,6 +13,9 @@ import mantenimiento.codecounter.validators.logicalValidators.MethodCallValidato
 import mantenimiento.codecounter.validators.logicalValidators.SpecialOperationValidator;
 import mantenimiento.codecounter.validators.logicalValidators.TryCatchValidator;
 
+/**
+ * Brinda el acceso a los validadores de formato o de líneas lógicas
+ */
 public class ValidatorManager {
     private static FormatValidatorHandler formatValidator = null;
     private static LogicalValidatorHandler logicalValidator = null;

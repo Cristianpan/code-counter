@@ -10,7 +10,6 @@ import java.util.List;
  * Clase que valida si una línea de código contiene operaciones especiales de
  * asignación, incremento o decremento.
  */
-
 public class SpecialOperationValidator extends LogicalValidator {
 
     /**

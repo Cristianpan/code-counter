@@ -7,11 +7,11 @@ import java.util.List;
 /**
  * Clase que verifica la presencia de estructuras de control
  * como if, else if, while, do-while, for, for-each y case.
- * 
  */
 public class ControlStructureValidator extends LogicalValidator {
 
-    private static final String CONTROL_STRUCTURE_REGEX = "^(" + FLOW_CONTROL_REGEX + "|\\s*\\}\\s*while\\s*)\\s*\\([^)]*\\s*\\)?;?.*";
+    private static final String CONTROL_STRUCTURE_REGEX = "^(" + FLOW_CONTROL_REGEX
+            + "|\\s*\\}\\s*while\\s*)\\s*\\([^)]*\\s*\\)?;?.*";
 
     /**
      * Verifica si la primera línea de código contiene una estructura de control.

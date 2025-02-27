@@ -1,4 +1,5 @@
 package mantenimiento.codecounter.models.reporters;
+
 import mantenimiento.codecounter.models.LineCounter;
 import java.nio.file.Path;
 
