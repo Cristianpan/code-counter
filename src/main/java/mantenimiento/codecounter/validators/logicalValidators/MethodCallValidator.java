@@ -1,5 +1,9 @@
 package mantenimiento.codecounter.validators.logicalValidators;
 
+import static mantenimiento.codecounter.constants.JavaRegextConstants.FLOW_CONTROL_REGEX;
+import static mantenimiento.codecounter.constants.JavaRegextConstants.IDENTIFIER_DECLARATION_REGEX;
+import static mantenimiento.codecounter.constants.JavaRegextConstants.PARAMETERS_DECLARATION_REGEX;
+
 import java.util.List;
 
 /**
@@ -7,7 +11,11 @@ import java.util.List;
  * y de forma correcta, con terminacion );
  */
 public class MethodCallValidator extends LogicalValidator {
-    private static final String METHOD_CALL_REGEX = "(((\\b\\w+\\s*\\.)+|\\b\\w+\\s*.)\\s*\\w+|\\b\\w+)\\s*\\(.*";
+    private static final String OBJECT_METHOD_CALL_REGEX = "^\\s*(" + IDENTIFIER_DECLARATION_REGEX + "\\.)+("
+            + IDENTIFIER_DECLARATION_REGEX + "(" + PARAMETERS_DECLARATION_REGEX + "|\\())+.*";
+
+    private static final String METHOD_CALL_REGEX = "^([a-zA-Z_]+("
+            + PARAMETERS_DECLARATION_REGEX + "|\\()).*";
 
     /**
      * valida si existe la llamada a un metodo de forma correcta, es decir, que
@@ -29,10 +37,10 @@ public class MethodCallValidator extends LogicalValidator {
      * ej: method();
      * 
      * @param lineOfCode sentencia por analizar
-     * @return true si coincide con una llamada a un metodo, false en caso contrario
+     * @return {@code true} si coincide con una llamada a un metodo, {@code false} en caso contrario
      */
     private boolean isMethodCall(String lineOfCode) {
-        return lineOfCode.matches(METHOD_CALL_REGEX);
+        return lineOfCode.trim().matches(OBJECT_METHOD_CALL_REGEX) || lineOfCode.trim().matches(METHOD_CALL_REGEX) && !lineOfCode.trim().matches(FLOW_CONTROL_REGEX);
     }
 
     /**
@@ -40,13 +48,16 @@ public class MethodCallValidator extends LogicalValidator {
      * que este completa para ser considerada como linea logica
      * 
      * @param linesOfCode lineas de codigo por analizar
-     * @return true si se encuentra la terminacion );, false en caso contrario
+     * @return {@code true} si se encuentra la terminacion );, {@code false} en caso contrario
      */
     private boolean isCompleteMethodCall(List<String> linesOfCode) {
+        int lastIndex = 1;
         for (String lineOfCode : linesOfCode) {
             if (lineOfCode.matches("([^)]*\\).?)+\\s*;.*")) {
+                removeLines(linesOfCode, lastIndex);
                 return true;
             }
+            lastIndex++;
         }
         return false;
     }

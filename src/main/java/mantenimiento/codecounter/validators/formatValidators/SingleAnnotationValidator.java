@@ -3,9 +3,11 @@ package mantenimiento.codecounter.validators.formatValidators;
 import mantenimiento.codecounter.exceptions.InvalidFormatException;
 
 import static mantenimiento.codecounter.constants.JavaRegextConstants.ANNOTATION_REGEX;
+import static mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_ANOTATION_STATEMENT;
 
 /**
- * Clase encargada de verificar si una línea contiene una anotación válida en el formato correcto,
+ * Clase encargada de verificar si una línea contiene una anotación válida en el
+ * formato correcto,
  * Una anotación válida debe comenzar con '@', seguida
  * de un nombre que cumpla con las reglas de identificadores de Java
  */
@@ -13,17 +15,19 @@ public class SingleAnnotationValidator extends FormatValidator {
 
     /**
      * Valida si la línea proporcionada contiene una anotación bien formada.
-     * Si la línea comienza con '@', se verifica su formato; si está mal formada, lanza una excepción.
+     * Si la línea comienza con '@', se verifica su formato; si está mal formada,
+     * lanza una excepción.
      *
      * @param lineOfFile Línea de código a validar.
      * @return true si la línea es una anotación válida
-     * @throws InvalidFormatException Si la línea es una anotación pero está mal formada.
+     * @throws InvalidFormatException Si la línea es una anotación pero está mal
+     *                                formada.
      */
     @Override
     public boolean isValid(String lineOfFile) throws InvalidFormatException {
         if (isAnnotation(lineOfFile)) {
             if (!isWellFormedAnnotation(lineOfFile)) {
-                throw new InvalidFormatException("Cada anotación debe estar en una sola línea y bien formada. Error en: " + lineOfFile);
+                throw new InvalidFormatException(INVALID_ANOTATION_STATEMENT, lineOfFile);
             }
             return true;
         }
@@ -31,7 +35,8 @@ public class SingleAnnotationValidator extends FormatValidator {
     }
 
     /**
-     * Determina si la línea corresponde a una anotación, verificando si comienza con '@'.
+     * Determina si la línea corresponde a una anotación, verificando si comienza
+     * con '@'.
      *
      * @param lineOfFile Línea de código a evaluar.
      * @return {@code true} si la línea comienza con '@',
@@ -42,10 +47,12 @@ public class SingleAnnotationValidator extends FormatValidator {
     }
 
     /**
-     * Verifica si una anotación está bien formada según la expresión regular definida en
+     * Verifica si una anotación está bien formada según la expresión regular
+     * definida en
      *
      * @param lineOfFile Línea de código a validar.
-     * @return {@code true} si la anotación cumple con el formato definido, {@code false} si no.
+     * @return {@code true} si la anotación cumple con el formato definido,
+     *         {@code false} si no.
      */
     private boolean isWellFormedAnnotation(String lineOfFile) {
         return lineOfFile.matches(ANNOTATION_REGEX);

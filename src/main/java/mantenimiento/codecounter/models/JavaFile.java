@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import mantenimiento.codecounter.exceptions.FileNotFoundException;
 
@@ -60,6 +61,8 @@ public class JavaFile {
      * @return Contenido del archivo java
      */
     public List<String> getContent() {
-        return this.content;
+        return this.content.stream()
+                .map(String::trim)
+                .collect(Collectors.toList());
     }
 }

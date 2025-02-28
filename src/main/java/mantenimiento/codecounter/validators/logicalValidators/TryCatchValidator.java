@@ -4,13 +4,13 @@ import java.util.List;
 
 public class TryCatchValidator extends LogicalValidator {
 
-    private static final String TRY_CATCH_REGEX = "^(try|}\\s*catch)\\s*\\(.*";
+    private static final String TRY_CATCH_REGEX = "^\\s*(try|}\\s*catch)\\s*\\(.*";
 
     /**
      * Valida si la linea por analizar contiene una declaracion try-with-resources o
      * catch , bien formada.
      * 
-     * @param linesOfCode 
+     * @param linesOfCode
      * @return {@code true} si la declaracion es correcta
      */
     @Override
@@ -18,7 +18,7 @@ public class TryCatchValidator extends LogicalValidator {
         if (isExceptionEstructure(linesOfCode.getFirst()) && isCompleteSentence(linesOfCode)) {
             return true;
         }
-        
+
         return this.validateNext(linesOfCode);
     }
 
@@ -31,8 +31,7 @@ public class TryCatchValidator extends LogicalValidator {
      * @return {@code true} si coincide con la declaracion
      */
     private boolean isExceptionEstructure(String lineOfCode) {
-
-        return lineOfCode.matches(TRY_CATCH_REGEX);
+        return lineOfCode.trim().matches(TRY_CATCH_REGEX);
     }
 
     /**
@@ -43,12 +42,14 @@ public class TryCatchValidator extends LogicalValidator {
      * @return {@code true} si cierra con )
      */
     private boolean isCompleteSentence(List<String> linesOfCode) {
+        int lastIndex = 1; 
         for (String lineOfCode : linesOfCode) {
-            if (lineOfCode.matches("[^\\)]*\\)\\s*}?.*")) {
+            if (lineOfCode.trim().matches("[^\\)]*\\)\\s*}?.*")) {
+                removeLines(linesOfCode, lastIndex);
                 return true;
             }
+            lastIndex++; 
         }
-
         return false;
     }
 }

@@ -7,12 +7,11 @@ import java.util.List;
 /**
  * Clase que verifica la presencia de estructuras de control
  * como if, else if, while, do-while, for, for-each y case.
- * 
  */
 public class ControlStructureValidator extends LogicalValidator {
 
     private static final String CONTROL_STRUCTURE_REGEX = "^(" + FLOW_CONTROL_REGEX
-            + " |}\\s*while\\s*)\\([^)]*\\s*\\)?.*";
+            + "|\\s*\\}\\s*while\\s*)\\s*\\([^)]*\\s*\\)?;?.*";
 
     /**
      * Verifica si la primera línea de código contiene una estructura de control.
@@ -42,7 +41,7 @@ public class ControlStructureValidator extends LogicalValidator {
      *         {@code false} en caso contrario.
      */
     private boolean isLogicalControlStructureDeclaration(String lineOfCode) {
-        return lineOfCode.matches(CONTROL_STRUCTURE_REGEX) && !lineOfCode.contains("switch");
+        return lineOfCode.trim().matches(CONTROL_STRUCTURE_REGEX) && !lineOfCode.trim().contains("switch");
     }
 
     /**
@@ -55,10 +54,13 @@ public class ControlStructureValidator extends LogicalValidator {
      *         {@code false} en caso contrario.
      */
     private boolean isValidStructure(List<String> linesOfCode) {
+        int i = 1;
         for (String lineOfCode : linesOfCode) {
-            if (lineOfCode.matches("[^)]*\\s*\\).*")) {
+            if (lineOfCode.trim().matches("[^)]*\\s*\\).*")) {
+                removeLines(linesOfCode, i);
                 return true;
             }
+            i++;
         }
         return false;
     }

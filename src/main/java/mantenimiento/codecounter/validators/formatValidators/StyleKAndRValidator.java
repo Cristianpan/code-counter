@@ -1,16 +1,6 @@
 package mantenimiento.codecounter.validators.formatValidators;
 
-import static mantenimiento.codecounter.constants.JavaRegextConstants.ACCESS_MODIFIERS_REGEX;
-import static mantenimiento.codecounter.constants.JavaRegextConstants.BOOLEANS_OPERATORS;
-import static mantenimiento.codecounter.constants.JavaRegextConstants.CATCH_DECLARATION_REGEX;
-import static mantenimiento.codecounter.constants.JavaRegextConstants.DATATYPE_DECLARATION_REGEX;
-import static mantenimiento.codecounter.constants.JavaRegextConstants.FINALLY_DECLARATION_REGEX;
-import static mantenimiento.codecounter.constants.JavaRegextConstants.FINAL_OR_STATIC_REGEX;
-import static mantenimiento.codecounter.constants.JavaRegextConstants.FLOW_CONTROL_REGEX;
-import static mantenimiento.codecounter.constants.JavaRegextConstants.IDENTIFIER_DECLARATION_REGEX;
-import static mantenimiento.codecounter.constants.JavaRegextConstants.PARAMETERS_DECLARATION_REGEX;
-import static mantenimiento.codecounter.constants.JavaRegextConstants.STRUCT_DECLARATION_REGEX;
-import static mantenimiento.codecounter.constants.JavaRegextConstants.TRY_DECLARATION_REGEX;
+import static mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_STYLE_K_AND_R;
 
 import mantenimiento.codecounter.exceptions.InvalidFormatException;
 
@@ -20,163 +10,52 @@ import mantenimiento.codecounter.exceptions.InvalidFormatException;
  */
 public class StyleKAndRValidator extends FormatValidator {
 
-    private static final String TYPE_DECLARION_REGEX = "^" + ACCESS_MODIFIERS_REGEX + "?((abstract|final)\\s*)?"
-            + STRUCT_DECLARATION_REGEX + "\\w*\\b.*";
-
-    private static final String METHOD_DECLARATION_REGEX = "^" + ACCESS_MODIFIERS_REGEX + FINAL_OR_STATIC_REGEX
-            + DATATYPE_DECLARATION_REGEX + IDENTIFIER_DECLARATION_REGEX + PARAMETERS_DECLARATION_REGEX + ".*";
-
-    private static final String FLOW_CONTROL_DECLARATION_REGEX = "^((" + FLOW_CONTROL_REGEX
-            + PARAMETERS_DECLARATION_REGEX + "?)|do\\s*).*";
-
-    private static final String TRY_CATCH_DECLARATION_REGEX = "^(" + TRY_DECLARATION_REGEX + "|"
-            + CATCH_DECLARATION_REGEX + "|" + FINALLY_DECLARATION_REGEX + ")";
-
-    private static final String FINAL_DECLARATION_REGEX = "^((" + DATATYPE_DECLARATION_REGEX
-            + IDENTIFIER_DECLARATION_REGEX + ",?\\s*)+|(" + BOOLEANS_OPERATORS + ".*)+.*)\\).*";
+    private static final String INVALID_OPENING_BRACKED_REGEX = "^\\s*\\{\\s*";
+    private static final String VALID_CLOSING_BRACKED_REGEX = "((\\s*\\}\\s*)|(\\s*\\}\\s*(while|else|catch|finally|\\)?;).*))";
+    private static final String EMPTY_BRACKED_REGEX = "^\\s*\\{.*\\}\\s*";
 
     @Override
     public boolean isValid(String lineOfFile) throws InvalidFormatException {
-        if (isDeclaration(lineOfFile)) {
-            return validateDeclaration(lineOfFile);
+        if (isInValidOpeningBracked(lineOfFile) || isInvalidClosingBracked(lineOfFile) || isEmptyBracked(lineOfFile)) {
+            throw new InvalidFormatException(INVALID_STYLE_K_AND_R, lineOfFile);
         }
-
-        if (isOpeningBracket(lineOfFile) || isInvalidClosingBracket(lineOfFile)) {
-            throw new InvalidFormatException("No se ha seguido el formato de K&R");
-        }
-
         return validateNext(lineOfFile);
     }
 
     /**
-     * Verifica si una línea de código es una declaración válida (tipo, método,
-     * control de flujo, try-catch o final).
+     * Verifica si la línea del archivo contiene un corchete de apertura no válido.
      *
-     * @param lineOfFile Línea de código a evaluar.
-     * @return {@code true} si es una declaración válida, {@code false} en caso
-     *         contrario.
+     * @param lineOfFile Línea del archivo a evaluar.
+     * @return {@code true} si la línea coincide con el patrón de corchete de
+     *         apertura no
+     *         válido, {@code false} en caso contrario.
      */
-    private boolean isDeclaration(String lineOfFile) {
-        return isTypeDeclaration(lineOfFile) || isMethodDeclaration(lineOfFile) ||
-                isFlowControlDeclaration(lineOfFile) || isTryCatchDeclaration(lineOfFile) ||
-                isFinalDeclaration(lineOfFile);
+    private boolean isInValidOpeningBracked(String lineOfFile) {
+        return lineOfFile.matches(INVALID_OPENING_BRACKED_REGEX);
     }
 
     /**
-     * Valida si una declaración sigue el formato de K&R.
+     * Verifica si la línea del archivo contiene un corchete de cierre no válido.
      *
-     * @param lineOfFile Línea de código a evaluar.
-     * @return {@code true} si la declaración es válida.
-     * @throws InvalidFormatException Si la declaración no sigue el formato de K&R.
+     * @param lineOfFile Línea del archivo a evaluar.
+     * @return {@code true} si la línea coincide con el patrón de corchete de cierre
+     *         no válido, {@code false} en caso contrario.
      */
-    private boolean validateDeclaration(String lineOfFile) throws InvalidFormatException {
-        if (endsWithOpeningBracket(lineOfFile)) {
-            return true;
-        }
-        throw new InvalidFormatException("No se ha seguido el formato de K&R");
+    private boolean isInvalidClosingBracked(String lineOfFile) {
+
+        return (lineOfFile.startsWith("}") || lineOfFile.endsWith("}"))
+                && !lineOfFile.matches(VALID_CLOSING_BRACKED_REGEX);
     }
 
     /**
-     * Verifica si una línea contiene una llave de cierre pero no es válida según el
-     * formato de K&R.
+     * Verifica si la línea del archivo contiene un par de corchetes vacío.
      *
-     * @param lineOfFile Línea de código a evaluar.
-     * @return {@code true} si la línea contiene una llave de cierre inválida,
-     *         {@code false} en caso contrario.
+     * @param lineOfFile Línea del archivo a evaluar.
+     * @return {@code true} si la línea coincide con el patrón de corchetes vacíos,
+     *         {@code false} en
+     *         caso contrario.
      */
-    private boolean isInvalidClosingBracket(String lineOfFile) {
-        return isClosingBracket(lineOfFile) && lineOfFile.trim().length() > 1 && !lineOfFile.contains("while");
-    }
-
-    /**
-     * Determina si una línea de código comienza con una llave de apertura '{'.
-     *
-     * @param lineOfCode Línea de código a evaluar.
-     * @return {@code true} si la línea comienza con '{', {@code false} en caso
-     *         contrario.
-     */
-    private boolean isOpeningBracket(String lineOfCode) {
-        return lineOfCode.startsWith("{");
-    }
-
-    /**
-     * Determina si una línea de código contiene una llave de cierre '}' en
-     * cualquier parte.
-     *
-     * @param lineOfCode Línea de código a evaluar.
-     * @return {@code true} si la línea contiene '}', {@code false} en caso
-     *         contrario.
-     */
-    private boolean isClosingBracket(String lineOfCode) {
-        return lineOfCode.matches(".*}.*");
-    }
-
-    /**
-     * Verifica si una línea de código termina con una llave de apertura '{'
-     * respetando el formato de K&R.
-     *
-     * @param lineOfCode Línea de código a evaluar.
-     * @return {@code true} si la línea finaliza con '{', {@code false} en caso
-     *         contrario.
-     */
-    private boolean endsWithOpeningBracket(String lineOfCode) {
-        return lineOfCode.matches("^[^{]*\\{.*");
-    }
-
-    /**
-     * Determina si una línea de código es una declaración de tipo.
-     *
-     * @param lineOfCode Línea de código a evaluar.
-     * @return {@code true} si la línea coincide con el patrón de declaración de
-     *         tipo, {@code false} en caso contrario.
-     */
-    private boolean isTypeDeclaration(String lineOfCode) {
-        return lineOfCode.matches(TYPE_DECLARION_REGEX);
-    }
-
-    /**
-     * Determina si una línea de código es una declaración de método.
-     *
-     * @param lineOfCode Línea de código a evaluar.
-     * @return {@code true} si la línea coincide con el patrón de declaración de
-     *         método, {@code false} en caso contrario.
-     */
-    private boolean isMethodDeclaration(String lineOfCode) {
-        return lineOfCode.matches(METHOD_DECLARATION_REGEX);
-    }
-
-    /**
-     * Determina si una línea de código es una declaración de control de flujo.
-     *
-     * @param lineOfCode Línea de código a evaluar.
-     * @return {@code true} si la línea coincide con el patrón de declaración de
-     *         control de flujo, {@code false} en caso contrario.
-     */
-    private boolean isFlowControlDeclaration(String lineOfCode) {
-        return lineOfCode.matches(FLOW_CONTROL_DECLARATION_REGEX);
-    }
-
-    /**
-     * Determina si una línea de código es una declaración de un bloque try-catch.
-     *
-     * @param lineOfCode Línea de código a evaluar.
-     * @return {@code true} si la línea coincide con el patrón de declaración de
-     *         try-catch, {@code false} en caso contrario.
-     */
-    private boolean isTryCatchDeclaration(String lineOfCode) {
-        return lineOfCode.matches(TRY_CATCH_DECLARATION_REGEX);
-    }
-
-    /**
-     * 
-     * Valida si la linea es el termino de una declaracion de una estructura de
-     * control
-     * o un método en donde ha habido un salto de línea
-     * 
-     * @param lineOfCode linea de codigo por analizar
-     * @return {@code true} si coincide con el final de la declaracion
-     */
-    private boolean isFinalDeclaration(String lineOfCode) {
-        return lineOfCode.matches(FINAL_DECLARATION_REGEX);
+    private boolean isEmptyBracked(String lineOfFile) {
+        return lineOfFile.matches(EMPTY_BRACKED_REGEX);
     }
 }
