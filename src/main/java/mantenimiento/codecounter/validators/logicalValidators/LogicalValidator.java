@@ -23,20 +23,6 @@ public abstract class LogicalValidator implements LogicalValidatorHandler {
     }
 
     /**
-     * Remueve las líneas que han sido contabilizadas como lineas
-     * lógicas
-     * 
-     * @param linesOfFile lineas de codigo a eliminar
-     * @param lastIndex   último indice que ha sido contabilizado como líneas lógica
-     */
-    protected void removeLines(List<String> linesOfFile, int lastIndex) {
-        while (lastIndex > 0 && !linesOfFile.isEmpty()) {
-            lastIndex--;
-            linesOfFile.remove(0);
-        }
-    }
-
-    /**
      * Valida la siguiente regla en la cadena de responsabilidad.
      * 
      * @param linesOfFile Lista de líneas de código a validar.
@@ -47,9 +33,6 @@ public abstract class LogicalValidator implements LogicalValidatorHandler {
         if (nextValidator != null) {
             return nextValidator.isValid(linesOfFile);
         }
-
-        removeLines(linesOfFile, 1);
-
         return false;
     }
 }

@@ -2,7 +2,7 @@ package mantenimiento.codecounter.validators.logicalValidators;
 
 import java.util.List;
 
-public class TryCatchValidator extends LogicalValidator {
+public class TryCatchDeclarationValidator extends LogicalValidator {
 
     private static final String TRY_CATCH_REGEX = "^\\s*(try|}\\s*catch)\\s*\\(.*";
 
@@ -42,13 +42,10 @@ public class TryCatchValidator extends LogicalValidator {
      * @return {@code true} si cierra con )
      */
     private boolean isCompleteSentence(List<String> linesOfCode) {
-        int lastIndex = 1; 
         for (String lineOfCode : linesOfCode) {
             if (lineOfCode.trim().matches("[^\\)]*\\)\\s*}?.*")) {
-                removeLines(linesOfCode, lastIndex);
                 return true;
             }
-            lastIndex++; 
         }
         return false;
     }

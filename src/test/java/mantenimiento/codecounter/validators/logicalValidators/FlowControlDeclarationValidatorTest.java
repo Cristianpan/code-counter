@@ -9,9 +9,9 @@ import org.junit.jupiter.api.DisplayName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ControlStructureValidatorTest {
+public class FlowControlDeclarationValidatorTest {
 
-    private final LogicalValidator validator = new ControlStructureValidator();
+    private final LogicalValidator validator = new FlowControlDeclarationValidator();
 
     @Test
     @DisplayName("Debe retornar true al detectar estructuras de control como if, else if, while, for")

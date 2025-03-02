@@ -9,9 +9,9 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class TryCatchValidatorTest {
+public class TryCatchDeclarationValidatorTest {
 
-    private final TryCatchValidator validator = new TryCatchValidator();
+    private final TryCatchDeclarationValidator validator = new TryCatchDeclarationValidator();
 
     @Test
     @DisplayName("Debe de retornar true al detectar un try-with-resources con estructura correcta")
