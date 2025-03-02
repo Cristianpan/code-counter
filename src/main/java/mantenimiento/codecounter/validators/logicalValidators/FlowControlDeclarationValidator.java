@@ -1,8 +1,6 @@
 package mantenimiento.codecounter.validators.logicalValidators;
 
-import static mantenimiento.codecounter.constants.JavaRegextConstants.FLOW_CONTROL_REGEX;
-
-import java.util.List;
+import static mantenimiento.codecounter.constants.JavaRegextConstants.FLOW_CONTROL_KEYS;
 
 /**
  * Clase que verifica la presencia de estructuras de control
@@ -10,8 +8,8 @@ import java.util.List;
  */
 public class FlowControlDeclarationValidator extends LogicalValidator {
 
-    private static final String CONTROL_STRUCTURE_REGEX = "^(" + FLOW_CONTROL_REGEX
-            + "|\\s*\\}\\s*while\\s*)\\s*\\([^)]*\\s*\\)?;?.*";
+
+    private static final String FLOW_CONTROL_DECLARATION = "^" + FLOW_CONTROL_KEYS + "\\([^)]*\\s*\\)?;?.*";
 
     /**
      * Verifica si la primera línea de código contiene una estructura de control.
@@ -22,43 +20,19 @@ public class FlowControlDeclarationValidator extends LogicalValidator {
      *         contrario.
      */
     @Override
-    public boolean isValid(List<String> linesOfCode) {
-
-        if (isLogicalControlStructureDeclaration(linesOfCode.getFirst()) && isValidStructure(linesOfCode)) {
-            return true;
-        }
-
-        return validateNext(linesOfCode);
+    public boolean isValid(String lineOfCode) {
+        return isFlowControlStructureDeclaration(lineOfCode) || validateNext(lineOfCode);
     }
 
     /**
      * Verifica si una línea de código es una declaración de estructura de control
-     * lógico,
-     * excluyendo las declaraciones de "switch".
+     * exceptuando: else, else if, case, default.
      *
      * @param lineOfCode Línea de código a evaluar.
      * @return {@code true} si es una estructura de control lógica válida,
      *         {@code false} en caso contrario.
      */
-    private boolean isLogicalControlStructureDeclaration(String lineOfCode) {
-        return lineOfCode.trim().matches(CONTROL_STRUCTURE_REGEX) && !lineOfCode.trim().contains("switch");
-    }
-
-    /**
-     * Verifica si una lista de líneas de código contiene una estructura válida,
-     * buscando el cierre de una declaración con ")", seguido de cualquier otro
-     * contenido.
-     *
-     * @param linesOfCode Lista de líneas de código a evaluar.
-     * @return {@code true} si al menos una línea cumple con el patrón,
-     *         {@code false} en caso contrario.
-     */
-    private boolean isValidStructure(List<String> linesOfCode) {
-        for (String lineOfCode : linesOfCode) {
-            if (lineOfCode.trim().matches("[^)]*\\s*\\).*")) {
-                return true;
-            }
-        }
-        return false;
+    private boolean isFlowControlStructureDeclaration(String lineOfCode) {
+        return lineOfCode.matches(FLOW_CONTROL_DECLARATION);
     }
 }

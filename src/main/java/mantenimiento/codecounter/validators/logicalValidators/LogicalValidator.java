@@ -1,7 +1,5 @@
 package mantenimiento.codecounter.validators.logicalValidators;
 
-import java.util.List;
-
 import mantenimiento.codecounter.interfaces.LogicalValidatorHandler;
 
 /**
@@ -29,10 +27,11 @@ public abstract class LogicalValidator implements LogicalValidatorHandler {
      * @return {@code true} si la validación es exitosa, {@code false} en caso
      *         contrario.
      */
-    protected boolean validateNext(List<String> linesOfFile) {
+    protected boolean validateNext(String linesOfFile) {
         if (nextValidator != null) {
             return nextValidator.isValid(linesOfFile);
         }
+
         return false;
     }
 }

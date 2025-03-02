@@ -2,7 +2,6 @@ package mantenimiento.codecounter.models;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 import mantenimiento.codecounter.exceptions.FileNotFoundException;
@@ -93,12 +92,11 @@ public class ProgramAnalyzer {
      */
     private static void countLines(List<String> fileContent, FormatValidatorHandler formatValidator,
             LogicalValidatorHandler logicalValidator, LineCounter lineCounter) throws InvalidFormatException {
-        List<String> fileContentCopy = new ArrayList<>(fileContent);
 
         for (String line : fileContent) {
             if (formatValidator.isValid(line.trim())) {
                 lineCounter.incrementPhysicalLineAmount();
-                if (!fileContentCopy.isEmpty() && logicalValidator.isValid(fileContentCopy)) {
+                if (logicalValidator.isValid(line)) {
                     lineCounter.incrementLogicalLineAmount();
                 }
             }
