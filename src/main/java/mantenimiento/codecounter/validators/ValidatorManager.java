@@ -8,6 +8,7 @@ import mantenimiento.codecounter.validators.formatValidators.SingleDeclarationVa
 import mantenimiento.codecounter.validators.formatValidators.StyleKAndRValidator;
 import mantenimiento.codecounter.validators.logicalValidators.FlowControlDeclarationValidator;
 import mantenimiento.codecounter.validators.logicalValidators.TryDeclarationValidator;
+import mantenimiento.codecounter.validators.logicalValidators.TypeDeclarationValidator;
 
 /**
  * Brinda el acceso a los validadores de formato o de líneas lógicas
@@ -51,9 +52,11 @@ public class ValidatorManager {
         }
 
         LogicalValidatorHandler tryCatchValidator = new TryDeclarationValidator();
-        LogicalValidatorHandler controlStructureValidator = new FlowControlDeclarationValidator();
+        LogicalValidatorHandler flowControlDeclarationValidator = new FlowControlDeclarationValidator();
+        LogicalValidatorHandler typeDeclarationValidator = new TypeDeclarationValidator(); 
         
-        tryCatchValidator.setNextValidator(controlStructureValidator);
+        tryCatchValidator.setNextValidator(flowControlDeclarationValidator);
+        flowControlDeclarationValidator.setNextValidator(typeDeclarationValidator);
         logicalValidator = tryCatchValidator;
 
         return logicalValidator;
