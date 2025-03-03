@@ -7,6 +7,7 @@ import mantenimiento.codecounter.validators.formatValidators.SingleAnnotationVal
 import mantenimiento.codecounter.validators.formatValidators.SingleDeclarationValidator;
 import mantenimiento.codecounter.validators.formatValidators.StyleKAndRValidator;
 import mantenimiento.codecounter.validators.logicalValidators.FlowControlDeclarationValidator;
+import mantenimiento.codecounter.validators.logicalValidators.MethodDeclarationValidator;
 import mantenimiento.codecounter.validators.logicalValidators.TryDeclarationValidator;
 import mantenimiento.codecounter.validators.logicalValidators.TypeDeclarationValidator;
 
@@ -54,9 +55,11 @@ public class ValidatorManager {
         LogicalValidatorHandler tryCatchValidator = new TryDeclarationValidator();
         LogicalValidatorHandler flowControlDeclarationValidator = new FlowControlDeclarationValidator();
         LogicalValidatorHandler typeDeclarationValidator = new TypeDeclarationValidator(); 
+        LogicalValidatorHandler methodDeclarationValidator = new MethodDeclarationValidator(); 
         
         tryCatchValidator.setNextValidator(flowControlDeclarationValidator);
         flowControlDeclarationValidator.setNextValidator(typeDeclarationValidator);
+        typeDeclarationValidator.setNextValidator(methodDeclarationValidator);
         logicalValidator = tryCatchValidator;
 
         return logicalValidator;
