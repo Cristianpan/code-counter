@@ -31,7 +31,9 @@ public class MethodDeclarationValidatorTest {
         List<String> methodDeclarations = List.of(
                 "public static void main(String[] args);",
                 "if (true) {",
-                "doSomething();");
+                "doSomething();",
+                "public static final ReasonInvalidFormat INVALID_STYLE_K_AND_R = new ReasonInvalidFormat(",
+                "public abstract void doSomething();");
 
         for (String methodDeclaration : methodDeclarations) {
             assertFalse(validator.isValid(methodDeclaration));
