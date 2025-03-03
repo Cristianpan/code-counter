@@ -6,12 +6,10 @@ import mantenimiento.codecounter.validators.formatValidators.ImportValidator;
 import mantenimiento.codecounter.validators.formatValidators.SingleAnnotationValidator;
 import mantenimiento.codecounter.validators.formatValidators.SingleDeclarationValidator;
 import mantenimiento.codecounter.validators.formatValidators.StyleKAndRValidator;
-import mantenimiento.codecounter.validators.logicalValidators.AssignmentValidator;
-import mantenimiento.codecounter.validators.logicalValidators.ControlStructureValidator;
-import mantenimiento.codecounter.validators.logicalValidators.FlowControlKeywordValidator;
-import mantenimiento.codecounter.validators.logicalValidators.MethodCallValidator;
-import mantenimiento.codecounter.validators.logicalValidators.SpecialOperationValidator;
-import mantenimiento.codecounter.validators.logicalValidators.TryCatchValidator;
+import mantenimiento.codecounter.validators.logicalValidators.FlowControlDeclarationValidator;
+import mantenimiento.codecounter.validators.logicalValidators.MethodDeclarationValidator;
+import mantenimiento.codecounter.validators.logicalValidators.TryDeclarationValidator;
+import mantenimiento.codecounter.validators.logicalValidators.TypeDeclarationValidator;
 
 /**
  * Brinda el acceso a los validadores de formato o de líneas lógicas
@@ -54,20 +52,15 @@ public class ValidatorManager {
             return logicalValidator;
         }
 
-        LogicalValidatorHandler assigmentValidator = new AssignmentValidator();
-        LogicalValidatorHandler methodCallValidator = new MethodCallValidator();
-        LogicalValidatorHandler tryCatchValidator = new TryCatchValidator();
-        LogicalValidatorHandler flowControlKeywordValidator = new FlowControlKeywordValidator();
-        LogicalValidatorHandler controlStructureValidator = new ControlStructureValidator();
-        LogicalValidatorHandler specialOperationValidator = new SpecialOperationValidator();
-
-        assigmentValidator.setNextValidator(tryCatchValidator);
-        tryCatchValidator.setNextValidator(controlStructureValidator);
-        controlStructureValidator.setNextValidator(methodCallValidator);
-        methodCallValidator.setNextValidator(flowControlKeywordValidator);
-        flowControlKeywordValidator.setNextValidator(specialOperationValidator);
-
-        logicalValidator = assigmentValidator;
+        LogicalValidatorHandler tryCatchValidator = new TryDeclarationValidator();
+        LogicalValidatorHandler flowControlDeclarationValidator = new FlowControlDeclarationValidator();
+        LogicalValidatorHandler typeDeclarationValidator = new TypeDeclarationValidator(); 
+        LogicalValidatorHandler methodDeclarationValidator = new MethodDeclarationValidator(); 
+        
+        tryCatchValidator.setNextValidator(flowControlDeclarationValidator);
+        flowControlDeclarationValidator.setNextValidator(typeDeclarationValidator);
+        typeDeclarationValidator.setNextValidator(methodDeclarationValidator);
+        logicalValidator = tryCatchValidator;
 
         return logicalValidator;
     }
