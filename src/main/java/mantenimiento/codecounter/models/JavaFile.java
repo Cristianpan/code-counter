@@ -16,6 +16,7 @@ import mantenimiento.codecounter.exceptions.FileNotFoundException;
  */
 public class JavaFile {
     private List<String> content;
+    private String fileName;
 
     /**
      * 
@@ -25,6 +26,7 @@ public class JavaFile {
     public JavaFile(Path filePath) throws FileNotFoundException {
         try {
             this.content = Files.readAllLines(filePath);
+            this.fileName = filePath.getFileName().toString();
         } catch (Exception e) {
             throw new FileNotFoundException(filePath.toString());
         }
@@ -64,5 +66,13 @@ public class JavaFile {
         return this.content.stream()
                 .map(String::trim)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 
+     * @return Nombre del archivo
+     */
+    public String getFileName() {
+        return this.fileName;
     }
 }
