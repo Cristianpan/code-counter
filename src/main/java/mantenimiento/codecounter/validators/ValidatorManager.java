@@ -64,7 +64,7 @@ public class ValidatorManager {
         tryCatchValidator.setNextValidator(flowControlDeclarationValidator);
         flowControlDeclarationValidator.setNextValidator(typeDeclarationValidator);
         typeDeclarationValidator.setNextValidator(methodDeclarationValidator);
-        typeDeclarationValidator.setNextValidator(lambdaDeclarationValidator);
+        methodDeclarationValidator.setNextValidator(lambdaDeclarationValidator);
         lambdaDeclarationValidator.setNextValidator(ternaryDeclarationValidator);
         logicalValidator = tryCatchValidator;
 
