@@ -14,6 +14,14 @@ public class StyleKAndRValidator extends FormatValidator {
     private static final String VALID_CLOSING_BRACKED_REGEX = "((\\s*\\}\\s*)|(\\s*\\}\\s*(while|else|catch|finally|\\)?;).*))";
     private static final String EMPTY_BRACKED_REGEX = "^\\s*\\{.*\\}\\s*";
 
+    /**
+     * Realiza la validacion del formato verificando si se cumple el estilo 
+     * de bloques K&R
+     * 
+     * @param lineOfFile linea de texto (sentencia de codigo) a validar
+     * @return {@code true} si se satisface el estilo de bloques K&R {@code false} en caso contrario
+     * @throws InvalidFormatException si no se cumple estilo de bloque K&R
+     */
     @Override
     public boolean isValid(String lineOfFile) throws InvalidFormatException {
         if (isInValidOpeningBracked(lineOfFile) || isInvalidClosingBracked(lineOfFile) || isEmptyBracked(lineOfFile)) {
@@ -27,8 +35,7 @@ public class StyleKAndRValidator extends FormatValidator {
      *
      * @param lineOfFile Línea del archivo a evaluar.
      * @return {@code true} si la línea coincide con el patrón de corchete de
-     *         apertura no
-     *         válido, {@code false} en caso contrario.
+     *         apertura no válido, {@code false} en caso contrario.
      */
     private boolean isInValidOpeningBracked(String lineOfFile) {
         return lineOfFile.matches(INVALID_OPENING_BRACKED_REGEX);
@@ -52,8 +59,7 @@ public class StyleKAndRValidator extends FormatValidator {
      *
      * @param lineOfFile Línea del archivo a evaluar.
      * @return {@code true} si la línea coincide con el patrón de corchetes vacíos,
-     *         {@code false} en
-     *         caso contrario.
+     *         {@code false} en caso contrario.
      */
     private boolean isEmptyBracked(String lineOfFile) {
         return lineOfFile.matches(EMPTY_BRACKED_REGEX);

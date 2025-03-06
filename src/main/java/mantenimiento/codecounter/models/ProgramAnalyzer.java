@@ -18,14 +18,13 @@ import mantenimiento.codecounter.validators.ValidatorManager;
 
 /**
  * Clase encargada de analizar archivos Java dentro de una carpeta, contando
- * líneas de código
- * físicas y lógicas, y generando un reporte con los resultados.
+ * líneas de código físicas y lógicas, y generando un reporte con los
+ * resultados.
  */
 public class ProgramAnalyzer {
     /**
      * Analiza los archivos Java dentro de la carpeta especificada, contando líneas
-     * de código y
-     * generando un reporte con los resultados.
+     * de código y generando un reporte con los resultados.
      *
      * @param folderPath Ruta de la carpeta que contiene los archivos Java.
      */
@@ -47,8 +46,7 @@ public class ProgramAnalyzer {
 
     /**
      * Procesa los archivos Java proporcionados, validando su formato y lógica antes
-     * de contar
-     * sus líneas de código.
+     * de contar sus líneas de código.
      *
      * @param javaFilePaths Lista de rutas de archivos Java a procesar.
      * @return Un objeto {@link LineCounter} con el conteo de líneas físicas y

@@ -23,13 +23,13 @@ public abstract class LogicalValidator implements LogicalValidatorHandler {
     /**
      * Valida la siguiente regla en la cadena de responsabilidad.
      * 
-     * @param linesOfFile Lista de líneas de código a validar.
+     * @param lineOfFile Líneas de código por validar.
      * @return {@code true} si la validación es exitosa, {@code false} en caso
      *         contrario.
      */
-    protected boolean validateNext(String linesOfFile) {
+    protected boolean validateNext(String lineOfFile) {
         if (nextValidator != null) {
-            return nextValidator.isValid(linesOfFile);
+            return nextValidator.isValid(lineOfFile);
         }
 
         return false;

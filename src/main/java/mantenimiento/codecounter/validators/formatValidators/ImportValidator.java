@@ -18,7 +18,7 @@ public class ImportValidator extends FormatValidator {
      * es un import y si utiliza un comodin
      * 
      * @param lineOfFile linea de texto (sentencia de codigo) a validar
-     * @return true si el import es sin comodin
+     * @return {@code true} si el import es sin comodin
      * @throws InvalidFormatException si el import se realiza con comodin
      */
     @Override
@@ -39,7 +39,7 @@ public class ImportValidator extends FormatValidator {
      * declaracion de import
      * 
      * @param lineOfCode sentencia a validar
-     * @return true si es una declaracion de import, false si no corresponde
+     * @return {@code true} si es una declaracion de import, {@code false} si no corresponde
      */
     private boolean isImportDeclaration(String lineOfCode) {
         String importDeclarationRegex = "^import\\s+.*;$";
@@ -50,7 +50,7 @@ public class ImportValidator extends FormatValidator {
      * Valida si la declaracion de import, incluso un import statico, tiene comodín
      * 
      * @param lineOfCode sentencia a validar
-     * @return true si el import es con comodin, false si no corresponde
+     * @return {@code true} si el import es con comodin, {@code false} si no corresponde
      */
     private boolean isImportWithWildcard(String lineOfCode) {
         String wildcardImportRegex = "^import\\s+(static\\s+)?(\\w+\\.\\s*)+\\*\\s*;";
