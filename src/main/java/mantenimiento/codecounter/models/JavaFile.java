@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import mantenimiento.codecounter.exceptions.FileNotFoundException;
 
 /**
- * 
  * Representacion de un archivo Java que provee metodos de acceso
  * para su contenido y eliminar informacion innecesaria para
  * el conteno de lineas logicas y fisicas
@@ -19,7 +18,6 @@ public class JavaFile {
     private String fileName;
 
     /**
-     * 
      * @param filePath Ruta del archivo
      * @throws FileNotFoundException Si la ruta es invalida
      */

@@ -19,7 +19,7 @@ public class SingleAnnotationValidator extends FormatValidator {
      * lanza una excepción.
      *
      * @param lineOfFile Línea de código a validar.
-     * @return true si la línea es una anotación válida
+     * @return {@code true} si la línea es una anotación válida
      * @throws InvalidFormatException Si la línea es una anotación pero está mal
      *                                formada.
      */

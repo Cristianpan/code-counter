@@ -4,20 +4,19 @@ import static mantenimiento.codecounter.constants.JavaRegextConstants.FLOW_CONTR
 
 /**
  * Clase que verifica la presencia de estructuras de control
- * como if, else if, while, do-while, for, for-each y case.
+ * como if, while, do-while, for, for-each y switch.
  */
 public class FlowControlDeclarationValidator extends LogicalValidator {
-
 
     private static final String FLOW_CONTROL_DECLARATION = "^" + FLOW_CONTROL_KEYS + "\\([^)]*\\s*\\)?;?.*";
 
     /**
-     * Verifica si la primera línea de código contiene una estructura de control.
+     * Determina si una línea de código si corresponde a una declaración
+     * de una estructura de control de flujo para considerarla como línea lógica
      * 
-     * @param linesOfCode Lista de líneas de código a analizar.
-     * @return {@code true} si se encuentra una estructura de control, {@code false}
-     *         en caso
-     *         contrario.
+     * @param lineOfCode Lista de líneas de código a analizar.
+     * @return {@code true} si se corresponde a la declaración de una estructura de
+     *         control, {@code false} en caso contrario.
      */
     @Override
     public boolean isValid(String lineOfCode) {
@@ -25,8 +24,9 @@ public class FlowControlDeclarationValidator extends LogicalValidator {
     }
 
     /**
-     * Verifica si una línea de código es una declaración de estructura de control
-     * exceptuando: else, else if, case, default.
+     * Verifica si una línea de código es una declaración de estructura de contro
+     * logiva valida considerando solo declaracion de if, while, do-while, for,
+     * for-each, switch
      *
      * @param lineOfCode Línea de código a evaluar.
      * @return {@code true} si es una estructura de control lógica válida,
