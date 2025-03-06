@@ -18,22 +18,21 @@ import mantenimiento.codecounter.validators.ValidatorManager;
 
 /**
  * Clase encargada de analizar archivos Java dentro de una carpeta, contando
- * líneas de código
- * físicas y lógicas, y generando un reporte con los resultados.
+ * líneas de código físicas y lógicas, y generando un reporte con los
+ * resultados.
  */
 public class ProgramAnalyzer {
     /**
      * Analiza los archivos Java dentro de la carpeta especificada, contando líneas
-     * de código y
-     * generando un reporte con los resultados.
+     * de código y generando un reporte con los resultados.
      *
      * @param folderPath Ruta de la carpeta que contiene los archivos Java.
      */
     public static void analyzeProgram(String folderPath) {
         try {
             List<Path> javaFilePaths = JavaFilesScanner.getJavaFiles(folderPath);
-            LineCounter lineCounter = processFiles(javaFilePaths);
-            generateReport(folderPath, lineCounter);
+            List<LineCounter> lineCounters = processFiles(javaFilePaths);
+            generateReport(folderPath, lineCounters);
         } catch (FolderNotFoundException e) {
             System.out.println(e.getMessage());
         } catch (JavaFilesNotFoundException e) {
@@ -47,8 +46,7 @@ public class ProgramAnalyzer {
 
     /**
      * Procesa los archivos Java proporcionados, validando su formato y lógica antes
-     * de contar
-     * sus líneas de código.
+     * de contar sus líneas de código.
      *
      * @param javaFilePaths Lista de rutas de archivos Java a procesar.
      * @return Un objeto {@link LineCounter} con el conteo de líneas físicas y
@@ -57,27 +55,22 @@ public class ProgramAnalyzer {
      * @throws InvalidFormatException Si se encuentra un error de formato en algún
      *                                archivo.
      */
-    private static LineCounter processFiles(List<Path> javaFilePaths)
+    private static List<LineCounter> processFiles(List<Path> javaFilePaths)
             throws FileNotFoundException, InvalidFormatException {
-        LineCounter lineCounter = new LineCounter();
-        FormatValidatorHandler formatValidator = ValidatorManager.getFormatValidator();
-        LogicalValidatorHandler logicalValidator = ValidatorManager.getLogicalValidator();
+
+        List<LineCounter> lineCounters = new ArrayList<>();
 
         for (Path filePath : javaFilePaths) {
-            List<String> fileContent = new JavaFile(filePath)
-                    .removeComments()
-                    .removeBlankLines()
-                    .getContent();
+            JavaFile javaFile = new JavaFile(filePath);
 
             try {
-                countLines(fileContent, formatValidator, logicalValidator, lineCounter);
-
+                lineCounters.add(countLines(javaFile));
             } catch (InvalidFormatException e) {
                 e.setFileName(filePath.getFileName().toString());
                 throw e;
             }
         }
-        return lineCounter;
+        return lineCounters;
     }
 
     /**
@@ -91,18 +84,25 @@ public class ProgramAnalyzer {
      * @param lineCounter      Contador de líneas donde se almacenan los resultados.
      * @throws InvalidFormatException Si alguna línea tiene un formato incorrecto.
      */
-    private static void countLines(List<String> fileContent, FormatValidatorHandler formatValidator,
-            LogicalValidatorHandler logicalValidator, LineCounter lineCounter) throws InvalidFormatException {
-        List<String> fileContentCopy = new ArrayList<>(fileContent);
+    private static LineCounter countLines(JavaFile javaFile) throws InvalidFormatException {
+        FormatValidatorHandler formatValidator = ValidatorManager.getFormatValidator();
+        LogicalValidatorHandler logicalValidator = ValidatorManager.getLogicalValidator();
+        List<String> fileContent = javaFile
+                .removeComments()
+                .removeBlankLines()
+                .getContent();
+        LineCounter lineCounter = new LineCounter(javaFile.getFileName());
 
         for (String line : fileContent) {
             if (formatValidator.isValid(line.trim())) {
                 lineCounter.incrementPhysicalLineAmount();
-                if (!fileContentCopy.isEmpty() && logicalValidator.isValid(fileContentCopy)) {
+                if (logicalValidator.isValid(line)) {
                     lineCounter.incrementLogicalLineAmount();
                 }
             }
         }
+
+        return lineCounter;
     }
 
     /**
@@ -112,8 +112,8 @@ public class ProgramAnalyzer {
      * @param lineCounter Contador de líneas de código con los resultados del
      *                    análisis.
      */
-    private static void generateReport(String folderPath, LineCounter lineCounter) {
-        Reporter reporter = new TerminalReporter(Paths.get(folderPath), lineCounter);
+    private static void generateReport(String folderPath, List<LineCounter> lineCounters) {
+        Reporter reporter = new TerminalReporter(Paths.get(folderPath), lineCounters);
         reporter.generateReport();
     }
 }

@@ -1,7 +1,5 @@
 package mantenimiento.codecounter.interfaces;
 
-import java.util.List;
-
 /**
  * Define un manejador para la validación lógica de código fuente.
  * Permite establecer una cadena de responsabilidad entre validadores.
@@ -22,5 +20,5 @@ public interface LogicalValidatorHandler {
      * @return {@code true} si las líneas cumplen con las reglas lógicas,
      *         {@code false} en caso contrario.
      */
-    public boolean isValid(List<String> linesOfCode);
+    public boolean isValid(String linesOfCode);
 }
